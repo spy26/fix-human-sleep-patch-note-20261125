@@ -16,6 +16,9 @@ def main() -> None:
     if not PATCH_NOTE or len(PATCH_NOTE) > 160:
         print("error: entry patch note must be non-empty and at most 160 characters", file=sys.stderr)
         sys.exit(1)
+    if any(ord(ch) < 32 or ord(ch) == 127 for ch in PATCH_NOTE):
+        print("error: entry patch note must be exactly one clean line (no newline or control characters)", file=sys.stderr)
+        sys.exit(1)
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
